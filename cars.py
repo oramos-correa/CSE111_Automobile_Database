@@ -1,8 +1,6 @@
 import sqlite3
 from sqlite3 import Error
 
-#_conn = sqlite3.connect("automobiles.sqlite")
-#cur = _conn.cursor()
 
 def openConnection(_dbFile):
     """ create a database connection to the SQLite database
@@ -58,7 +56,7 @@ def createTables(_conn):
         _conn.execute(sql)
         print("success seller table")
 #--------------------------------------
-        sql= """CREATE TABLE manufacturer (
+        sql = """CREATE TABLE manufacturer (
             m_name varchar(50) not null,
             m_address varchar(50) not null,
             m_email varchar(50) not null,
@@ -67,15 +65,15 @@ def createTables(_conn):
         _conn.execute(sql)
         print("success manufacturer table")
 #--------------------------------------
-        sql = """CREATE TABLE transaction (
+        sql = """CREATE TABLE transactions (
             t_customer varchar(45) not null,
             t_seller varchar(45) not null,
             t_model varchar(45) not null,
             t_price decimal(10,2) not null,
-            t_date date not null
+            t_date DATE not null
         )"""
         _conn.execute(sql)
-        print("success transaction table")
+        print("success transactions table")
 #--------------------------------------
         sql = """CREATE TABLE automobile (
             a_model varchar(45) not null,
@@ -115,7 +113,7 @@ def dropTables(_conn):
         sql = """DROP TABLE manufacturer"""
         _conn.execute(sql)
 
-        sql = """DROP TABLE transaction"""
+        sql = """DROP TABLE transactions"""
         _conn.execute(sql)
 
         sql = """DROP TABLE automobile"""
@@ -135,14 +133,10 @@ def main():
     # create a database connection
     conn = openConnection(database)
     with conn:
-        #dropTables(conn)
+        dropTables(conn)
         createTables(conn)
         #populateTables(conn)
-        #pcsByMaker(conn, "A")
-        #productByMaker(conn, "Laptop", "A")
-        #allProductsByMaker(conn, "A")
+       
     closeConnection(conn, database)
 if __name__ == '__main__':
     main()
-
-#_conn.close()
