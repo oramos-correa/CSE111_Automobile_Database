@@ -35,33 +35,56 @@ def createTables(_conn):
     _conn.execute("BEGIN")
 
     try:
+        #Done for now
+        sql = """CREATE TABLE automobile ( 
+            a_vinID integer PRIMARY KEY,
+            a_make varchar(50) NOT NULL,
+            a_model varchar(50) NOT NULL,
+            a_type varchar(50) NOT NULL,
+            a_year integer NOT NULL,
+            a_condition varchar(15) NOT NULL,
+            a_price decimal(10,2) NOT NULL,
+            a_color varchar(15)
+        )"""
+        _conn.execute(sql)
+        print("success automobile table")
+#--------------------------------------
+        #Done for now
         sql = """CREATE TABLE customer (
-            c_name varchar(45) not null,
-            c_phone decimal(10,0) not null,
-            c_address varchar(45) not null,
-            c_email varchar(50) not null,
-            c_model varchar(50) not null
+            c_custkey integer PRIMARY KEY,
+            c_vinID integer NOT NULL REFERENCES automobile(a_vinID);
+            c_last varchar(50) NOT NULL,
+            c_first varchar(50) NOT NULL,
+            c_age integer NOT NULL,
+            c_phone varchar(50) NOT NULL,
+            c_address varchar(50) NOT NULL,
+            c_city varchar(50) NOT NULL,
+            c_state varchar(50) NOT NULL,
+            c_email varchar(65) NOT NULL
         )"""
         _conn.execute(sql)
         print("success customer table")
 #--------------------------------------
+        #Done for now
         sql = """CREATE TABLE seller (
-            s_model varchar(50) not null,
-            s_name varchar(45) not null,
-            s_phone decimal(10,0) not null,
-            s_location varchar(50) not null,
-            s_email varchar(50) not null,
-            s_stock BOOLEAN not null
+            s_sellerkey integer PRIMARY KEY,
+            s_vinID integer NOT NULL REFERENCES automobile(a_vinID),
+            s_name varchar(75) UNIQUE NOT NULL,
+            s_phone varchar(20) UNIQUE NOT NULL,
+            s_city varchar(50) NOT NULL,
+            s_state varchar(50) NOT NULL,
+            s_email varchar(75) NOT NULL
         )"""
         _conn.execute(sql)
         print("success seller table")
 #--------------------------------------
+        #Done for now
         sql = """CREATE TABLE manufacturer (
-            m_name varchar(50) not null,
+            m_manufacturerkey integer PRIMARY KEY,
+            m_name varchar(50) UNIQUE REFERENCES automobile(a_make) NOT NULL,
             m_email varchar(50) not null,
             m_address varchar(50) not null,
-            m_city_state varchar(50) not null,
-            m_model varchar(50) not null
+            m_city_state varchar(50) not null
         )"""
         _conn.execute(sql)
         print("success manufacturer table")
@@ -75,24 +98,14 @@ def createTables(_conn):
         )"""
         _conn.execute(sql)
         print("success transactions table")
+        
 #--------------------------------------
-        sql = """CREATE TABLE automobile (
-            a_model varchar(45) not null,
-            a_year integer not null,
-            a_make varchar(45) not null, 
-            a_location varchar(45) not null,
-            a_type varchar(45) not null,
-            a_new BOOLEAN not null,
-            a_used BOOLEAN not null,
-            a_price decimal(11,2) not null,
-            a_color varchar(45) not null
-        )"""
-        _conn.execute(sql)
-        print("success automobile table")
-#--------------------------------------
+        #Done for now
         sql = """CREATE TABLE warehouse (
-            w_location varchar(50) not null,
-            w_model varchar(50) not null
+            w_key integer PRIMARY KEY,
+            w_sellerkey integer REFERENCES seller(s_sellerkey) NOT NULL,
+            w_vinID integer REFERENCES automobile(a_vinID),
+            w_city varchar(50) NOT NULL
         )"""
         _conn.execute(sql)
         _conn.execute("COMMIT")
