@@ -36,6 +36,7 @@ def createTables(_conn):
 
     try:
         #Done for now
+        #a_location will be used to determine whether the car is at a dealership, warehouse, manufacturer, etc.
         sql = """CREATE TABLE automobile ( 
             a_vinID integer PRIMARY KEY,
             a_make varchar(50) NOT NULL,
@@ -44,7 +45,8 @@ def createTables(_conn):
             a_year integer NOT NULL,
             a_condition varchar(15) NOT NULL,
             a_price decimal(10,2) NOT NULL,
-            a_color varchar(15)
+            a_color varchar(15) NOT NULL
+            a_location integer NOT NULL
         )"""
         _conn.execute(sql)
         print("success automobile table")
@@ -73,7 +75,7 @@ def createTables(_conn):
             s_phone varchar(20) UNIQUE NOT NULL,
             s_city varchar(50) NOT NULL,
             s_state varchar(50) NOT NULL,
-            s_email varchar(75) NOT NULL
+            s_email varchar(75) UNIQUE NOT NULL
         )"""
         _conn.execute(sql)
         print("success seller table")
@@ -81,20 +83,20 @@ def createTables(_conn):
         #Done for now
         sql = """CREATE TABLE manufacturer (
             m_manufacturerkey integer PRIMARY KEY,
-            m_name varchar(50) UNIQUE REFERENCES automobile(a_make) NOT NULL,
-            m_email varchar(50) not null,
-            m_address varchar(50) not null,
-            m_city_state varchar(50) not null
+            m_name varchar(50) UNIQUE NOT NULL REFERENCES automobile(a_make),
+            m_email varchar(50) NOT NULL,
+            m_address varchar(50) NOT NULL,
+            m_city_state varchar(50) NOT NULL
         )"""
         _conn.execute(sql)
         print("success manufacturer table")
 #--------------------------------------
         sql = """CREATE TABLE transactions (
-            t_customer varchar(45) not null,
-            t_seller varchar(45) not null,
-            t_model varchar(45) not null,
-            t_price decimal(10,2) not null,
-            t_date DATE not null
+            t_trkey integer PRIMARY KEY,
+            t_custkey integer NOT NULL REFERENCES customer(c_custkey),
+            t_sellerkey integer NOT NULL REFERENCES seller(s_sellerkey),
+            t_vinID integer UNIQUE NOT NULL REFERENCES automobile(a_vinID)'
+            t_date date NOT NULL
         )"""
         _conn.execute(sql)
         print("success transactions table")
